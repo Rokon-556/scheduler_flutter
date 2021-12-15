@@ -62,7 +62,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 _selectedDay = selectDay;
                 _focusedDay = focusDay;
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => AddTimePage()));
+                    MaterialPageRoute(builder: (context) => SchedulerPage()));
               });
               print(focusDay);
             },

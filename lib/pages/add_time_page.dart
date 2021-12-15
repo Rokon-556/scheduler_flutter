@@ -7,18 +7,16 @@ import 'package:flutter_calender/pages/scheduler_page.dart';
 class AddTimePage extends StatefulWidget {
   int? scheduleID;
 
-
-   AddTimePage({Key? key,this.scheduleID}) : super(key: key);
+  AddTimePage({Key? key, this.scheduleID}) : super(key: key);
 
   @override
   _AddTimePageState createState() => _AddTimePageState();
 }
 
 class _AddTimePageState extends State<AddTimePage> {
-
   final _formKey = GlobalKey<FormState>();
-  List<SchedulerModel>scheduleList=[];
-  final schedule=SchedulerModel();
+  List<SchedulerModel> scheduleList = [];
+  final schedule = SchedulerModel();
 
   TextEditingController? _titleController,
       _descriptionController,
@@ -31,46 +29,46 @@ class _AddTimePageState extends State<AddTimePage> {
     _startController = TextEditingController();
     _endController = TextEditingController();
 
-    if(widget.scheduleID!=null){
-     DBHelper.getScheduleByID(widget.scheduleID!).then((model){
-      print(widget.scheduleID);
-      _titleController?.text=model!.title.toString();
-      _descriptionController?.text=model!.description.toString();
-      _startController?.text=model!.startTime.toString();
-      _endController?.text=model!.endTime.toString();
-     });
+    if (widget.scheduleID != null) {
+      DBHelper.getScheduleByID(widget.scheduleID!).then((model) {
+        print(widget.scheduleID);
+        _titleController?.text = model!.title.toString();
+        _descriptionController?.text = model!.description.toString();
+        _startController?.text = model!.startTime.toString();
+        _endController?.text = model!.endTime.toString();
+      });
     }
 
     super.initState();
-
   }
 
-  void _saveSchedule(){
+  void _saveSchedule() {
     _formKey.currentState!.save();
-    Future <int> id=DBHelper.insertSchedule(TABLE_SCHEDULER,schedule.toMap());
-    id.then((id){
-      if(id>0){
+    Future<int> id = DBHelper.insertSchedule(TABLE_SCHEDULER, schedule.toMap());
+    id.then((id) {
+      if (id > 0) {
         print('Saved');
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SchedulerPage()));
-      }else{
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => SchedulerPage()));
+      } else {
         print('Not Saved');
       }
     });
     print(schedule);
   }
-  void _updateSchedule(){
+
+  void _updateSchedule() {
     _formKey.currentState!.save();
-    schedule.id=widget.scheduleID;
-    DBHelper.updateSchedule(schedule).then((value){
-      if(value>0){
+    schedule.id = widget.scheduleID;
+    DBHelper.updateSchedule(schedule).then((value) {
+      if (value > 0) {
         print('Update');
         Navigator.of(context).pop();
-      }else{
+      } else {
         print('could not updated');
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +90,8 @@ class _AddTimePageState extends State<AddTimePage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                onSaved: (value){
-                  schedule.title=value;
+                onSaved: (value) {
+                  schedule.title = value;
                 },
               ),
               SizedBox(
@@ -107,8 +105,8 @@ class _AddTimePageState extends State<AddTimePage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                onSaved: (value){
-                  schedule.description=value;
+                onSaved: (value) {
+                  schedule.description = value;
                 },
               ),
               SizedBox(
@@ -122,8 +120,8 @@ class _AddTimePageState extends State<AddTimePage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                onSaved: (value){
-                  schedule.startTime=double.parse('$value');
+                onSaved: (value) {
+                  schedule.startTime = double.parse('$value');
                 },
               ),
               SizedBox(
@@ -137,8 +135,8 @@ class _AddTimePageState extends State<AddTimePage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                onSaved: (value){
-                  schedule.endTime=double.parse('$value');
+                onSaved: (value) {
+                  schedule.endTime = double.parse('$value');
                 },
               ),
               SizedBox(
@@ -146,13 +144,17 @@ class _AddTimePageState extends State<AddTimePage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  if(widget.scheduleID==null){
+                  if (widget.scheduleID == null) {
                     _saveSchedule();
-                  }else{
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SchedulerPage()));
+                  } else {
                     _updateSchedule();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SchedulerPage()));
                   }
                 },
-                child: Text(widget.scheduleID==null?'Save':'Update'),
+                child: Text(widget.scheduleID == null ? 'Save' : 'Update'),
               ),
             ],
           ),

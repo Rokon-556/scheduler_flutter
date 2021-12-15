@@ -23,10 +23,13 @@ class DBHelper {
     return db;
   }
 
-  static Future<int> insertSchedule(String tableName,Map<String,dynamic>data) async {
+  static Future<int> insertSchedule(
+      String tableName, Map<String, dynamic> data) async {
     final db = await createDBScheduler();
     var result = await db.insert(
-      tableName,data,conflictAlgorithm: ConflictAlgorithm.replace,
+      tableName,
+      data,
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return result;
   }
@@ -54,13 +57,22 @@ class DBHelper {
 
   static Future<int> updateSchedule(SchedulerModel schedulerModel) async {
     final db = await createDBScheduler();
-    return await db.update(TABLE_SCHEDULER, schedulerModel.toMap(),
-        where: '$COL_PLACE_ID = ?', whereArgs: [schedulerModel.id]);
+    return await db.update(
+      TABLE_SCHEDULER,
+      schedulerModel.toMap(),
+      where: '$COL_PLACE_ID = ?',
+      whereArgs: [schedulerModel.id],
+    );
   }
-  static Future<SchedulerModel?>getScheduleByID(int id)async{
-    final db=await createDBScheduler();
-    final List<Map<String,dynamic>>schedule=await db.query(TABLE_SCHEDULER,where: '$COL_PLACE_ID = ? ',whereArgs:[id] );
-    if(schedule.length>0){
+
+  static Future<SchedulerModel?> getScheduleByID(int id) async {
+    final db = await createDBScheduler();
+    final List<Map<String, dynamic>> schedule = await db.query(
+      TABLE_SCHEDULER,
+      where: '$COL_PLACE_ID = ? ',
+      whereArgs: [id],
+    );
+    if (schedule.length > 0) {
       return SchedulerModel.fromMap(schedule.first);
     }
     return null;
